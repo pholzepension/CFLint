@@ -1,0 +1,12 @@
+{
+  "excludes": [
+    {
+      "code": "FUNCTION_HINT_MISSING"
+    }
+  ],
+  "includes": [
+    {
+      "code": "CUSTOM_FUNCTION_HINT_MISSING"
+    }
+  ]
+}

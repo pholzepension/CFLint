@@ -280,6 +280,18 @@
             "parameter": []
         },
         {
+            "name": "CustomFunctionHintChecker",
+            "className": "CustomFunctionHintChecker",
+            "message": [
+                {
+                    "code": "CUSTOM_FUNCTION_HINT_MISSING",
+                    "messageText": "Function ${variable} is missing a hint.",
+                    "severity": "INFO"
+                }
+            ],
+            "parameter": []
+        },
+        {
             "name": "ArgumentHintChecker",
             "className": "ArgHintChecker",
             "message": [
@@ -1062,6 +1074,7 @@
                 "ARG_HINT_MISSING",
                 "COMPONENT_HINT_MISSING",
                 "FUNCTION_HINT_MISSING",
+                "CUSTOM_FUNCTION_HINT_MISSING",
                 "FUNCTION_TYPE_ANY",
                 "FUNCTION_TYPE_MISSING",
                 "ARG_HINT_MISSING_SCRIPT"
