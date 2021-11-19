@@ -2,11 +2,19 @@ package com.cflint.config;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Collection;
+import java.util.List;
 
 import javax.xml.bind.Marshaller;
 
+import com.cflint.BugInfo;
+import com.cflint.api.CFLintAPI;
+import com.cflint.api.CFLintResult;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import org.junit.Test;
 
 import com.cflint.Levels;
@@ -17,6 +25,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class TestCFLintConfig {
+    private CFLintAPI cfBugs;
 
     final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" + "<CFLint-Plugin>\n"
             + "    <ruleImpl name=\"OPM\">\n" + "        <message code=\"code\">\n"
@@ -76,5 +85,22 @@ public class TestCFLintConfig {
         assertEquals("MyCode", backConfig.getRuleGroups().get(0).getMessages().get(0).getCode());
         assertEquals("messageText", backConfig.getRuleGroups().get(0).getMessages().get(0).getMessageText());
         assertEquals(Levels.INFO, backConfig.getRuleGroups().get(0).getDefaultSeverity());
+    }
+
+    @Test
+    public void testConfigRC() throws Exception {
+        final ConfigBuilder configBuilder = new ConfigBuilder().addCustomConfig("src/test/resources/com/cflint/tests/Config/.cflintrc");
+        cfBugs = new CFLintAPI(configBuilder.build());
+        final String scriptSrc =
+            "component {\r\n" + "function test() {\r\n" +
+            "	var thisIsNotTooLong = \"Fred\";\r\n" +
+            "	var thisIsTooLongForTheDefault = \"Fred\";\r\n" +
+            "	var thisIsTooLongEvenForTheCustomConfig = \"Fred\";\r\n" +
+            "}\r\n" + "}";
+        CFLintResult lintResult = cfBugs.scan(scriptSrc, "test");
+        final List<BugInfo> result = lintResult.getIssues().values().iterator().next();
+        assertEquals(1, result.size());
+        assertEquals("VAR_TOO_LONG", result.get(0).getMessageCode());
+        assertEquals(5, result.get(0).getLine());
     }
 }

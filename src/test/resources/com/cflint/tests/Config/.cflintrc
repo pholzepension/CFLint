@@ -1,0 +1,17 @@
+{
+  "inheritParent" : false,
+  "parameters":
+    {
+      "VariableNameChecker.minLength": "4",
+      "VariableNameChecker.maxLength": "30"
+    },
+  "excludes": [
+    { "code": "FUNCTION_HINT_MISSING" },
+    { "code": "COMPONENT_HINT_MISSING" },
+    { "code": "ARG_HINT_MISSING" },
+    { "code": "ARG_HINT_MISSING_SCRIPT" }
+  ],
+  "includes": [
+    { "code": "VAR_TOO_LONG" }
+  ]
+}
