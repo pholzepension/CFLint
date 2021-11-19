@@ -3,6 +3,7 @@ package com.cflint;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -84,6 +85,18 @@ public class TestCFBugs_GLobalVarChecker {
         assertEquals("GLOBAL_VAR", result.get(0).getMessageCode());
         assertEquals("CGI", result.get(0).getVariable());
         assertEquals(3, result.get(0).getLine());
+    }
+
+    @Test
+    public void testThis() throws CFLintScanException {
+        final String scriptSrc =
+            "component {\r\n" +
+                "private function test(required string testArgument) { \r\n" +
+                "    this.isNotGlobal = 'thisIsFine'; \r\n" +
+                " } \r\n" +
+            " } ";
+        CFLintResult lintResult = cfBugs.scan(scriptSrc, "test");
+        assertEquals(0, lintResult.getIssues().size());
     }
 
 }

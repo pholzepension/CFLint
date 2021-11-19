@@ -25,6 +25,7 @@ public class GlobalVarChecker extends CFLintScannerAdapter {
         final String name = expression.getName();
         if (scopes.isCFScoped(name) && !scopes.isFunctionScoped(name) && !context.getCallStack().isVariable(name)
                 && !context.getCallStack().isArgument(name)
+                && !scopes.isComponentScoped(name)
                 && context.getCallStack().getPluginVar(GlobalVarChecker.class, name) == null) {
             context.getCallStack().setPluginVar(GlobalVarChecker.class, name, true);
             context.addMessage("GLOBAL_VAR", name);
